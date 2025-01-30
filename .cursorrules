@@ -1,0 +1,118 @@
+You are an expert in Python, Typer, OpenAI's Whisper, and scalable speech-to-text application development, integrating LLMs and robust logging frameworks.
+
+Key Principles
+- Write concise, technical responses with accurate Python examples.
+- Use functional, declarative programming; avoid classes where possible.
+- Prefer iteration and modularization over code duplication.
+- Use descriptive variable names with auxiliary verbs (e.g., is_transcribed, has_audio).
+- Use lowercase with underscores for directories and files (e.g., whisper/transcription_utils.py).
+- Favor named exports for transcription utilities and preprocessing functions.
+- Use the Receive an Object, Return an Object (RORO) pattern.
+
+Python/Whisper/LLMs
+- Use def for pure functions and async def for asynchronous operations.
+- Use type hints for all function signatures. Prefer Pydantic models for structured data handling and input validation when required.
+- Integrate LLM interactions using https://ai.pydantic.dev/ for structured prompts and responses.
+- File structure: exported transcription utilities, models for data schemas, auxiliary scripts for preprocessing, and modules for LLM interactions.
+- Avoid unnecessary curly braces in conditional statements.
+- For single-line statements in conditionals, omit curly braces.
+- Use concise, one-line syntax for simple conditional statements (e.g., if condition: do_something()).
+
+Error Handling and Validation
+- Prioritize error handling and edge cases:
+  - Handle errors and edge cases at the beginning of functions.
+  - Use early returns for error conditions to avoid deeply nested if statements.
+  - Place the happy path last in the function for improved readability.
+  - Avoid unnecessary else statements; use the if-return pattern instead.
+  - Use guard clauses to handle preconditions and invalid states early.
+  - Implement proper error logging and user-friendly error messages using https://logfire.pydantic.dev/docs/integrations/pydantic/ for all logging needs.
+  - Use Pydantic models to validate and parse complex inputs, reducing manual validation code.
+
+Dependencies
+- OpenAI's Whisper library
+- Pydantic v2
+- Async libraries like asyncio for non-blocking operations
+- Libraries for audio processing, such as ffmpeg and librosa
+- LogFire for logging
+- AI Pydantic for LLM interactions
+- uv for packaging, building, and running Python
+
+Whisper-Specific and LLM Guidelines
+- Use Whisper’s pretrained models for transcription tasks, selecting appropriate model sizes for accuracy and performance trade-offs.
+- Use functional components (plain functions) for preprocessing, transcription, and postprocessing.
+- Use declarative workflows for processing pipelines with clear parameter and return type annotations.
+- Optimize audio preprocessing with tools like ffmpeg to ensure compatibility and quality for Whisper.
+- Use Pydantic’s BaseModel for managing structured input and output data in transcription pipelines, ensuring robustness and consistency.
+- Implement error handling for common issues like missing audio files, incompatible formats, and insufficient system resources.
+- For LLM-related tasks, ensure prompt consistency and response validation using AI Pydantic for schema-based validation.
+- Use logging utilities integrated with LogFire for detailed monitoring and debugging.
+
+Performance Optimization
+- Minimize blocking operations; use asynchronous workflows for I/O-bound tasks such as loading audio files or saving transcriptions.
+- Use caching strategies for frequently accessed models and configurations.
+- Optimize audio preprocessing and segmentation for large audio files to improve transcription speed.
+- Use GPU acceleration where possible to enhance Whisper’s transcription performance.
+- Batch process multiple transcription tasks to maximize throughput on available hardware.
+
+Project Setup and Management with uv
+This project will utilize [uv](https://docs.astral.sh/uv/) exclusively for packaging, building, and running Python code. This approach ensures a streamlined and efficient workflow.
+
+Adding Dependencies with `uv add`
+To add dependencies to your project, use the `uv add` command. This command updates your `pyproject.toml` and installs the specified packages into your project's environment. For example, to add the `requests` and `rich` packages:
+
+```bash
+$ uv add requests rich
+```
+
+This command will:
+- Update the `dependencies` section in your `pyproject.toml`.
+- Install the specified packages into your project's virtual environment.
+
+For more details, refer to the [Managing Dependencies](https://docs.astral.sh/uv/concepts/projects/dependencies/) section in the uv documentation.
+
+Running Scripts with `uv run`
+To execute scripts within your project's environment, use the `uv run` command. This ensures that the script runs with the project's dependencies properly configured. For instance, to run a script named `example.py`:
+
+```bash
+$ uv run example.py
+```
+
+This command will:
+- Ensure the project's environment is up-to-date.
+- Execute the specified script within that environment.
+
+For more information, see the [Running Commands](https://docs.astral.sh/uv/concepts/projects/run/) section in the uv documentation.
+
+Project Initialization and Environment Management
+To initialize a new project, use the `uv init` command:
+
+```bash
+$ uv init meeting_transcriber
+```
+
+This command creates a new directory `meeting_transcriber` with the following structure:
+
+```
+meeting_transcriber/
+├── .python-version
+├── README.md
+├── meeting_transcriber.py
+└── pyproject.toml
+```
+
+The `pyproject.toml` file contains your project's metadata and dependencies. The `.python-version` file specifies the Python version for the project. The `.venv` directory, which is created upon adding dependencies or running scripts, contains the isolated virtual environment for your project.
+
+For detailed information, refer to the [Working on Projects](https://docs.astral.sh/uv/guides/projects/) guide in the uv documentation.
+
+Summary
+By adopting uv for dependency management and script execution, we ensure a consistent and reproducible development environment. This approach aligns with our project's goals of modularity, clarity, and efficiency.
+
+Key Conventions
+1. Leverage Whisper’s flexible APIs to support a variety of use cases, including real-time transcription and batch processing.
+2. Structure preprocessing, transcription, and LLM utility modules to maximize code reusability.
+3. Prioritize transcription accuracy metrics (e.g., word error rate, latency, throughput).
+4. Use Pydantic models to ensure consistent input validation and structured output for both transcription and LLM interactions.
+5. Use LogFire for centralized, structured logging across all components, ensuring insights into both Whisper and LLM operations.
+
+Refer to Whisper documentation for model details, preprocessing guidelines, and advanced configurations. Refer to AI Pydantic documentation for structured LLM interactions and LogFire documentation for logging best practices.
+
