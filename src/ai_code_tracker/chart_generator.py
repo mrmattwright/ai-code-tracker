@@ -48,15 +48,14 @@ class ChartGenerator:
                 raise
 
     def generate_ai_percentage_chart(self, stats: List[ContributionStats]) -> None:
-        """Generate line chart showing AI code percentage over time."""
+        """Generate bar chart showing AI code percentage over time."""
         df = pd.DataFrame([stat.model_dump() for stat in stats])
 
         fig = go.Figure()
         fig.add_trace(
-            go.Scatter(
+            go.Bar(
                 x=df["date"],
                 y=df["percentage_total_changes_ai"],
-                mode="lines+markers",
                 name="AI Code Percentage",
             )
         )
