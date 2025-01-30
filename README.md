@@ -31,6 +31,96 @@ cd ai-code-tracker
 uv sync
 ```
 
+## Git Configuration
+
+To track AI vs human contributions, you need to set up your Git configuration to use different author information when committing AI-generated code. The tool identifies AI contributions by matching the author email in `DEFAULT_AI_COMMITTER` (default: "llm <llm@opioinc.com>").
+
+### Setting Up Multiple Git Configs
+
+Create a `.gitconfig` for your AI commits:
+
+```ini
+[user]
+    name = llm
+    email = llm@opioinc.com
+```
+
+And one for your human commits:
+
+```ini
+[user]
+    name = Your Name
+    email = your.email@example.com
+```
+
+You can switch between configs using:
+
+```bash
+# For AI commits
+git config --local include.path ../.gitconfig-ai
+
+# For human commits
+git config --local include.path ../.gitconfig-human
+```
+
+Or set per-command author:
+
+```bash
+# For one-off AI commits
+git commit -m "AI generated change" --author="llm <llm@opioinc.com>"
+```
+
+### Customizing AI Author
+
+If you want to use a different AI author identifier, modify `DEFAULT_AI_COMMITTER` in `src/ai_code_tracker/contribution_tracker.py`:
+
+```python
+DEFAULT_AI_COMMITTER = "your-ai-name <your-ai@email.com>"
+```
+
+### Commit Message Format
+
+When committing AI-generated code, you need to include a time-prompting metric in your commit message:
+
+```bash
+git commit -m "feat: Add new feature
+
+time-prompting: M"
+```
+
+Valid time-prompting values are:
+- `S`: Small (< 5 minutes)
+- `M`: Medium (5-15 minutes)
+- `L`: Large (15-30 minutes)
+- `XL`: Extra Large (> 30 minutes)
+
+### Enforcing Commit Message Format
+
+You can enforce the time-prompting format for AI commits by adding a Git commit hook. Create `.git/hooks/commit-msg`:
+
+```bash
+#!/bin/bash
+
+COMMIT_MSG_FILE="$1"
+COMMITTER_EMAIL=$(git config --get user.email)
+TARGET_EMAIL="llm@opioinc.com"
+
+# Only enforce for AI commits
+if [[ "$COMMITTER_EMAIL" == "$TARGET_EMAIL" ]]; then
+    if ! grep -Eq "time-prompting:\s*(S|M|L|XL)\b" "$COMMIT_MSG_FILE"; then
+        echo "ERROR: Commit message must include 'time-prompting: S|M|L|XL'"
+        exit 1
+    fi
+fi
+
+exit 0
+```
+
+Make it executable:
+```bash
+chmod +x .git/hooks/commit-msg
+```
+
 ## Usage
 
 ```bash
