@@ -1,0 +1,143 @@
+**Product Requirements Document (PRD)**
+
+**Project Name:** AI vs. Human Code Contribution Analysis Tool
+
+**Version:** 1.0
+
+**Date:** [Insert Date]
+
+**Author:** [Insert Author]
+
+---
+
+## **1. Overview**
+### **1.1 Purpose**
+The AI vs. Human Code Contribution Analysis Tool is designed to analyze Git repositories and determine the proportion of code written by AI-assisted tools versus human developers. The tool provides a breakdown of contributions over time, supporting daily, weekly, and monthly aggregations.
+
+### **1.2 Scope**
+This tool processes Git repositories to extract code ownership statistics, tracking AI-assisted commits and human contributions. The system supports:
+- Analysis of changes over a specified date range.
+- Aggregation of contributions per day, with optional grouping by week or month.
+- Generation of YAML reports summarizing code contribution statistics.
+- Filtering of files based on predefined inclusion/exclusion criteria.
+
+### **1.3 Objectives**
+- Provide clear insights into AI vs. human contribution percentages.
+- Allow tracking of contribution trends across different time intervals.
+- Support automation for reporting through YAML output.
+- Offer an efficient and scalable solution for large Git repositories.
+
+---
+
+## **2. Functional Requirements**
+
+### **2.1 Key Features**
+#### **2.1.1 Code Contribution Analysis**
+- Extracts commit history within a specified date range.
+- Identifies authors of each code line using `git blame`.
+- Flags AI-generated contributions based on commit messages.
+- Captures AI commit metadata related to "time-prompting" for analysis.
+
+#### **2.1.2 Filtering and File Selection**
+- Includes relevant source files (`.js`, `.py`, `.scm`, `.sh`, `Dockerfile`, `Gemfile`).
+- Supports additional YAML configuration for customizable inclusion/exclusion.
+- Excludes non-source files such as `tests/fixtures/watch` and predefined scripts.
+
+#### **2.1.3 Historical Tracking and Reporting**
+- Processes contributions per day.
+- Supports aggregation by week or month for trend analysis.
+- Produces YAML output with contribution breakdowns.
+- Maintains historical records to compare trends.
+
+### **2.2 User Interaction & Inputs**
+- CLI-based interaction using Typer.
+- Optional arguments:
+  - `--start-date` (mandatory): The starting date for analysis.
+  - `--end-date` (optional): The end date for analysis, defaults to the current date.
+  - `--group-by`: Allows aggregation by `day` (default), `week`, or `month`.
+  - `--output`: Save output to a specified YAML file.
+
+### **2.3 Output Structure**
+YAML output structure includes:
+```yaml
+- date: YYYY-MM-DD
+  file_counts:
+    "path/to/file.py":
+      "Author Name": 120
+      "AI": 45
+  grand_total:
+    "Author Name": 500
+    "AI": 150
+  total_lines: 650
+  ai_total: 150
+  ai_percentage: 23.08
+  ai_commit_metadata:
+    time_prompting:
+      S: 10
+      M: 25
+      L: 5
+      XL: 2
+```
+If grouped by `week` or `month`, the `date` field will represent the first day of the week or month.
+
+---
+
+## **3. Technical Requirements**
+
+### **3.1 Technology Stack**
+- **Programming Language:** Python 3
+- **Dependencies:**
+  - `Typer` (command-line parsing)
+  - `subprocess` (Git command execution)
+  - `semver` (semantic versioning)
+  - `yaml` (output serialization)
+  - `tqdm` (progress visualization)
+  - `collections` (data aggregation)
+  - `datetime` (time-based filtering)
+
+### **3.2 Performance Considerations**
+- Efficiently handles large repositories with optimized Git commands.
+- Uses batch processing to minimize redundant Git operations.
+- Supports multi-threaded execution for future scalability.
+
+### **3.3 Error Handling & Logging**
+- Captures and logs Git command failures.
+- Handles missing files gracefully (e.g., files not existing in certain commits).
+- Provides warnings for failed operations without interrupting execution.
+
+---
+
+## **4. Non-Functional Requirements**
+
+### **4.1 Security**
+- Requires read-only access to the Git repository.
+- No external API dependencies to prevent data leaks.
+
+### **4.2 Usability**
+- CLI-based interface with clear argument options.
+- Output is structured and human-readable.
+
+### **4.3 Maintainability**
+- Modular code structure for easy updates and enhancements.
+- YAML configuration for easy customization of file filters.
+
+---
+
+## **5. Future Enhancements**
+- **Web-based Dashboard:** Visualize AI vs. human contributions over time.
+- **Custom AI Identifiers:** Allow users to define patterns for AI-generated commits.
+- **Multi-Repository Analysis:** Aggregate results across multiple repositories by allowing users to specify multiple Git repositories as inputs.
+- **Cross-Repository Trends:** Enable comparison of AI vs. human contributions across different repositories over time.
+- **Enhanced AI Metadata Tracking:** Extend AI commit tracking to include additional contextual data like "time-prompting" categories (S, M, L, XL) from Git pre-commit hooks.
+
+---
+
+## **6. Approval**
+- Product Owner: [Insert Name]  
+- Lead Developer: [Insert Name]  
+- Date Approved: [Insert Date]  
+
+---
+
+**End of Document**
+
