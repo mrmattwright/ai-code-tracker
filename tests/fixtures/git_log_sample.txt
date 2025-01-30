@@ -1,0 +1,45 @@
+48c6fafd021e477f68aab5b8eec831b9b2895f4f,2025-01-30,llm,added readme
+
+time-prompting:S
+
+
+94	2	README.md
+4	3	stats.yaml
+e1dc2d034e1d5e32889fe5859b10ef06590d3094,2025-01-30,mrmattwright,Added logging
+
+
+2	0	git_contribution_analyzer.py
+1	0	pyproject.toml
+13	7	stats.yaml
+24	0	uv.lock
+18dbf5b5831b6865a09c96627aa66f098b56e2bd,2025-01-30,llm,01-llm-version
+
+time-prompting:M
+
+
+208	0	git_contribution_analyzer.py
+8	4	pyproject.toml
+19	0	stats.yaml
+169	0	uv.lock
+5150cf54327fcc57c4bba87a71ef6b73c258bace,2025-01-30,mrmattwright,setup prd for first feature
+
+
+12	0	.pre-commit-config.yaml
+1	1	.python-version
+23	0	hooks/commit-msg-check.sh
+308	0	refs/prds/01-blame.py
+143	0	refs/prds/01-gitblame.prd
+1f9c30388f7cde6d9e8196a96c7eba2050ce3622,2025-01-30,mrmattwright,initial project setup
+
+
+118	0	.cursorrules
+1	0	.python-version
+14	0	pyproject.toml
+2	0	src/ai_code_tracker/__init__.py
+0	0	src/ai_code_tracker/py.typed
+7	0	uv.lock
+d0992b3b26ff53dd63f6fac9bf4f63a9a5f91a38,2025-01-30,Matt Wright,Initial commit
+
+171	0	.gitignore
+21	0	LICENSE
+2	0	README.md
