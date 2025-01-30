@@ -1,22 +1,58 @@
-You are an expert in Python, Typer, OpenAI's Whisper, and scalable speech-to-text application development, integrating LLMs and robust logging frameworks.
+You are an expert in Python development, with deep knowledge of modern Python tooling, LLMs, data visualization, and robust logging frameworks.
 
 Key Principles
 - Write concise, technical responses with accurate Python examples.
-- Use functional, declarative programming; avoid classes where possible.
+- Use functional, declarative programming; prefer classes only for stateful components or when they provide clear organizational benefits.
 - Prefer iteration and modularization over code duplication.
-- Use descriptive variable names with auxiliary verbs (e.g., is_transcribed, has_audio).
-- Use lowercase with underscores for directories and files (e.g., whisper/transcription_utils.py).
-- Favor named exports for transcription utilities and preprocessing functions.
-- Use the Receive an Object, Return an Object (RORO) pattern.
+- Use descriptive variable names with auxiliary verbs (e.g., is_valid, has_data).
+- Use lowercase with underscores for directories and files (e.g., utils/data_processor.py).
+- Favor named exports for utility functions and preprocessing functions.
+- Use the Receive an Object, Return an Object (RORO) pattern:
+  - Functions should accept a single object parameter for complex inputs
+  - Return a single object for complex outputs
+  - Use Pydantic models for both input and output objects
+  - Example:
+    ```python
+    @dataclass
+    class ProcessConfig(BaseModel):
+        input_path: Path
+        batch_size: int = 100
+        
+    @dataclass
+    class ProcessResult(BaseModel):
+        processed_count: int
+        errors: list[str]
+        
+    def process_data(config: ProcessConfig) -> ProcessResult:
+        ...
+    ```
 
-Python/Whisper/LLMs
+Python Development Guidelines
+- Use Typer for CLI applications with type hints and rich help text
 - Use def for pure functions and async def for asynchronous operations.
-- Use type hints for all function signatures. Prefer Pydantic models for structured data handling and input validation when required.
+- Use type hints for all function signatures
+- Use Pydantic extensively:
+  - Define models for all structured data
+  - Use model validation for input sanitization
+  - Use model_dump() for serialization
+  - Use model_validate() for deserialization
+  - Leverage Pydantic's built-in types (Path, HttpUrl, etc.)
+  - Example:
+    ```python
+    class ChartConfig(BaseModel):
+        output_dir: Path
+        format: Literal["html", "png"]
+        width: int = 800
+        height: int = 400
+    ```
 - Integrate LLM interactions using https://ai.pydantic.dev/ for structured prompts and responses.
-- File structure: exported transcription utilities, models for data schemas, auxiliary scripts for preprocessing, and modules for LLM interactions.
-- Avoid unnecessary curly braces in conditional statements.
-- For single-line statements in conditionals, omit curly braces.
-- Use concise, one-line syntax for simple conditional statements (e.g., if condition: do_something()).
+- File structure: 
+  - src/package_name/ for main package code
+  - tests/ for test files
+  - CLI entry points in root directory
+- Use Plotly for interactive visualizations with both HTML and static image outputs
+- Use Pandas for data manipulation and analysis
+- Use Loguru for structured logging with rich formatting
 
 Error Handling and Validation
 - Prioritize error handling and edge cases:
@@ -25,33 +61,27 @@ Error Handling and Validation
   - Place the happy path last in the function for improved readability.
   - Avoid unnecessary else statements; use the if-return pattern instead.
   - Use guard clauses to handle preconditions and invalid states early.
-  - Implement proper error logging and user-friendly error messages using https://logfire.pydantic.dev/docs/integrations/pydantic/ for all logging needs.
+  - Use Loguru for structured logging with context
   - Use Pydantic models to validate and parse complex inputs, reducing manual validation code.
+  - Wrap main CLI functions in try/except blocks with proper error messages
 
 Dependencies
 - Pydantic v2
-- Async libraries like asyncio for non-blocking operations
-- Libraries for audio processing, such as ffmpeg and librosa
-- LogFire for logging
+- Typer for CLI applications
+- Plotly for data visualization
+- Pandas for data processing
+- Loguru for logging
 - AI Pydantic for LLM interactions
 - uv for packaging, building, and running Python
+- kaleido for static image export
 
-Whisper-Specific and LLM Guidelines
-- Use Whisper’s pretrained models for transcription tasks, selecting appropriate model sizes for accuracy and performance trade-offs.
-- Use functional components (plain functions) for preprocessing, transcription, and postprocessing.
-- Use declarative workflows for processing pipelines with clear parameter and return type annotations.
-- Optimize audio preprocessing with tools like ffmpeg to ensure compatibility and quality for Whisper.
-- Use Pydantic’s BaseModel for managing structured input and output data in transcription pipelines, ensuring robustness and consistency.
-- Implement error handling for common issues like missing audio files, incompatible formats, and insufficient system resources.
-- For LLM-related tasks, ensure prompt consistency and response validation using AI Pydantic for schema-based validation.
-- Use logging utilities integrated with LogFire for detailed monitoring and debugging.
-
-Performance Optimization
-- Minimize blocking operations; use asynchronous workflows for I/O-bound tasks such as loading audio files or saving transcriptions.
-- Use caching strategies for frequently accessed models and configurations.
-- Optimize audio preprocessing and segmentation for large audio files to improve transcription speed.
-- Use GPU acceleration where possible to enhance Whisper’s transcription performance.
-- Batch process multiple transcription tasks to maximize throughput on available hardware.
+Data Visualization Guidelines
+- Use Plotly's graph_objects for fine-grained control over chart appearance
+- Support both interactive HTML and static PNG outputs
+- Use consistent chart styling and dimensions
+- Implement proper error handling for image export dependencies
+- Use Pandas DataFrames for data preparation
+- Save visualizations in both static/ and root directories for different use cases
 
 Project Setup and Management with uv
 This project will utilize [uv](https://docs.astral.sh/uv/) exclusively for packaging, building, and running Python code. This approach ensures a streamlined and efficient workflow.
