@@ -10,6 +10,7 @@ from typing import Any, Dict, List, Optional
 
 import typer
 import yaml
+from loguru import logger
 from rich.console import Console
 from tqdm import tqdm
 
@@ -37,6 +38,7 @@ DEFAULT_AI_COMMITTER = "llm <llm@opioinc.com>"
 def run_git_command(cmd: List[str]) -> str:
     """Execute a git command and return its output."""
     try:
+        logger.info(f"Running git command: {' '.join(cmd)}")
         result = subprocess.run(cmd, capture_output=True, text=True, check=True)
         return result.stdout.strip()
     except subprocess.CalledProcessError as e:
