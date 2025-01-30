@@ -41,6 +41,7 @@ uv run pytest
 - `--start-date`: Start date for analysis (YYYY-MM-DD) [required]
 - `--end-date`: End date for analysis (YYYY-MM-DD) [default: current date]
 - `--group-by`: Group results by 'day' or 'week' [default: day]
+- `--repository-path`: Full local path to Git repository [default: current directory]
 
 ### Sample Output
 

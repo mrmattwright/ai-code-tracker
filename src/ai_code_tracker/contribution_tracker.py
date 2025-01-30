@@ -181,6 +181,9 @@ def analyze(
         None, formats=["%Y-%m-%d"], help="End date for analysis (YYYY-MM-DD)"
     ),
     group_by: str = typer.Option("day", help="Group results by 'day' or 'week'"),
+    repository_path: Optional[str] = typer.Option(
+        None, help="Full local path to Git repository (defaults to current directory)"
+    ),
 ):
     """Analyze Git repository for AI vs. human code contributions over time."""
     if not end_date:
@@ -193,14 +196,16 @@ def analyze(
     try:
         cmd = [
             "git",
+            "-C",
+            repository_path if repository_path else ".",
             "log",
             f"--since={start_date.isoformat()}",
             f"--until={end_date.isoformat()}",
-            "--pretty=%H,%ad,%an,%B",
+            '--pretty="===COMMIT===%n%H,%ad,%an,%B"',
             "--date=short",
             "--numstat",
         ]
-        logger.info(f"Running git command: {' '.join(cmd)}")
+        logger.info(f"Running git log command: {' '.join(cmd)}")
 
         git_log = subprocess.run(
             cmd,
