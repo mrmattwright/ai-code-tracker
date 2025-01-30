@@ -2,7 +2,6 @@
 
 import subprocess
 from datetime import datetime
-from pprint import pprint
 from typing import Dict, List, Optional
 
 import pandas as pd
@@ -36,71 +35,61 @@ def parse_git_log(log_output: str) -> List[Dict]:
     commits = []
     current_commit = None
 
-    for commit_block in log_output.split("===COMMIT==="):
-        if not commit_block.strip():
-            continue
+    # Split by commit delimiter and filter empty entries
+    commit_blocks = [
+        block.strip() for block in log_output.split("===COMMIT===") if block.strip()
+    ]
 
-        lines = commit_block.strip().split("\n")
-        header = lines[0]
+    for block in commit_blocks:
+        lines = block.split("\n")
+        header = lines[0].split(",")
 
-        if "," not in header:
-            continue
+        if len(header) >= 4:  # Valid commit header
+            hash, date, author, *msg_parts = header
+            message = ",".join(msg_parts)
 
-        hash, date, author, *msg_parts = header.split(",")
-        message = ",".join(msg_parts)
+            current_commit = {
+                "hash": hash,
+                "date": date,
+                "author": author,
+                "message": message.strip(),
+                "files": [],
+                "time_prompting": None,
+            }
 
-        # Get full commit message including any additional lines before file stats
-        full_message = message
-        for line in lines[1:]:
-            if line.strip() and not (
-                line[0].isdigit() or line[0] == "-" or line.startswith('"')
-            ):
-                full_message += "\n" + line
+            # Process remaining lines for time-prompting and file stats
+            for line in lines[1:]:
+                line = line.strip()
+                if not line:
+                    continue
 
-        current_commit = {
-            "hash": hash,
-            "date": date,
-            "author": author,
-            "message": full_message.strip(),
-            "files": [],
-            "time_prompting": None,
-        }
+                if "time-prompting:" in line:
+                    current_commit["time_prompting"] = line.split("time-prompting:")[
+                        1
+                    ].strip()
+                elif line[0].isdigit() or line[0] == "-":  # File stats line
+                    parts = line.split("\t")
+                    if len(parts) == 3:
+                        additions = int(parts[0]) if parts[0] != "-" else 0
+                        deletions = int(parts[1]) if parts[1] != "-" else 0
+                        filename = parts[2]
 
-        # Extract time-prompting if present
-        if "time-prompting:" in full_message:
-            current_commit["time_prompting"] = (
-                full_message.split("time-prompting:")[1].strip().split("\n")[0]
-            )
+                        if any(
+                            filename.endswith(pat.replace("*", ""))
+                            for pat in DEFAULT_INCLUDE_PATTERNS
+                        ) and not any(
+                            filename.startswith(pat.replace("*", ""))
+                            for pat in DEFAULT_EXCLUDE_PATTERNS
+                        ):
+                            current_commit["files"].append(
+                                {
+                                    "filename": filename,
+                                    "additions": additions,
+                                    "deletions": deletions,
+                                }
+                            )
 
-        # Process file changes
-        for line in lines[1:]:
-            if not line.strip():
-                continue
-
-            if line[0].isdigit() or line[0] == "-":  # File stats line
-                parts = line.strip().split("\t")
-                if len(parts) == 3:
-                    additions = int(parts[0]) if parts[0] != "-" else 0
-                    deletions = int(parts[1]) if parts[1] != "-" else 0
-                    filename = parts[2]
-
-                    # Only include files matching patterns
-                    if any(
-                        filename.endswith(pat.replace("*", ""))
-                        for pat in DEFAULT_INCLUDE_PATTERNS
-                    ) and not any(
-                        filename.startswith(pat.replace("*", ""))
-                        for pat in DEFAULT_EXCLUDE_PATTERNS
-                    ):
-                        current_commit["files"].append(
-                            {
-                                "filename": filename,
-                                "additions": additions,
-                                "deletions": deletions,
-                            }
-                        )
-
-        commits.append(current_commit)
+            commits.append(current_commit)
 
     return commits
 
@@ -207,7 +196,7 @@ def analyze(
             "log",
             f"--since={start_date.isoformat()}",
             f"--until={end_date.isoformat()}",
-            '--pretty="===COMMIT===%n%H,%ad,%an,%B"',
+            "--pretty=%H,%ad,%an,%B",
             "--date=short",
             "--numstat",
         ]
@@ -223,7 +212,6 @@ def analyze(
         commits = parse_git_log(git_log)
 
         logger.info(f"Found {len(commits)} commits")
-        pprint(commits[1])
 
         df = aggregate_commits(commits, group_by)
 

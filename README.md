@@ -7,10 +7,10 @@ Heavily inspired by [Aider's Release History](https://aider.chat/HISTORY.html)
 ## Features
 
 - Analyze Git repositories to determine AI vs. human code contributions
-- Track contributions over time with daily, weekly, or monthly aggregation
-- Generate detailed YAML reports with contribution statistics
+- Track contributions over time with daily or weekly aggregation
 - Smart file filtering for relevant source files
-- Track AI commit metadata including time-prompting metrics
+- Track AI commit metadata including time-prompting metrics (S/M/L/XL)
+- Detailed statistics including lines added/deleted and percentage of AI changes
 
 ## Installation
 
@@ -26,48 +26,42 @@ uv sync
 ## Usage
 
 ```bash
-# Basic usage
- uv run git_contribution_analyzer.py analyze --start-date 2024-01-01
+# Basic usage with date range
+uv run contribution_tracker.py --start-date 2025-01-01 --end-date 2025-03-01
 
-# Save analysis to YAML file
- uv run git_contribution_analyzer.py analyze \
-    --start-date 2024-01-01 \
-    --output stats.yaml
+# Group by week instead of day
+uv run contribution_tracker.py --start-date 2025-01-01 --group-by week
 
-# analysis of another repo
-uv run git_contribution_analyzer.py analyze --start-date 2024-01-01 --repo-path /Users/matt/src/another-repo
+# Run tests
+uv run pytest
 ```
 
 ### Options
 
-- `--repo-path`: Path to Git repository (default: current directory)
 - `--start-date`: Start date for analysis (YYYY-MM-DD) [required]
 - `--end-date`: End date for analysis (YYYY-MM-DD) [default: current date]
-- `--ai-committer`: Committer identifier for AI contributions [default: "llm <llm@opioinc.com>"]
-- `--output`: Output YAML file path [optional]
+- `--group-by`: Group results by 'day' or 'week' [default: day]
 
-### Output Format
+### Sample Output
 
-The tool generates a YAML report with the following structure:
-
-```yaml
-date: YYYY-MM-DD
-file_counts:
-  "path/to/file.py":
-    "Author Name": 120
-    "AI": 45
-grand_total:
-  "Author Name": 500
-  "AI": 150
-total_lines: 650
-ai_total: 150
-ai_percentage: 23.08
-ai_commit_metadata:
-  time_prompting:
-    S: 10
-    M: 25
-    L: 5
-    XL: 2
+```json
+{
+    "date": "2025-01-30",
+    "ai_commits": 2,
+    "total_commits": 7,
+    "human_commits": 5,
+    "ai_lines_added": 302,
+    "ai_lines_deleted": 2,
+    "ai_total_changes": 304,
+    "human_lines_added": 337,
+    "human_lines_deleted": 0,
+    "human_total_changes": 337,
+    "percentage_total_changes_ai": 47.43,
+    "time_prompting_S": 1,
+    "time_prompting_M": 1,
+    "time_prompting_L": 0,
+    "time_prompting_XL": 0
+}
 ```
 
 ## File Filtering

@@ -83,23 +83,24 @@ This command will:
 
 For more information, see the [Running Commands](https://docs.astral.sh/uv/concepts/projects/run/) section in the uv documentation.
 
+Running Tests with `uv run tests`
+To execute tests within your project's environment, use the `uv run tests` command. This ensures that the tests run with the project's dependencies properly configured.
+
+```bash
+$ uv run tests
+```
+
+This command will:
+- Ensure the project's environment is up-to-date.
+- Execute the specified test script within that environment.
+
+
 Project Initialization and Environment Management
 To initialize a new project, use the `uv init` command:
 
 ```bash
-$ uv init meeting_transcriber
+$ uv init 
 ```
-
-This command creates a new directory `meeting_transcriber` with the following structure:
-
-```
-meeting_transcriber/
-├── .python-version
-├── README.md
-├── meeting_transcriber.py
-└── pyproject.toml
-```
-
 The `pyproject.toml` file contains your project's metadata and dependencies. The `.python-version` file specifies the Python version for the project. The `.venv` directory, which is created upon adding dependencies or running scripts, contains the isolated virtual environment for your project.
 
 For detailed information, refer to the [Working on Projects](https://docs.astral.sh/uv/guides/projects/) guide in the uv documentation.
@@ -107,12 +108,5 @@ For detailed information, refer to the [Working on Projects](https://docs.astral
 Summary
 By adopting uv for dependency management and script execution, we ensure a consistent and reproducible development environment. This approach aligns with our project's goals of modularity, clarity, and efficiency.
 
-Key Conventions
-1. Leverage Whisper’s flexible APIs to support a variety of use cases, including real-time transcription and batch processing.
-2. Structure preprocessing, transcription, and LLM utility modules to maximize code reusability.
-3. Prioritize transcription accuracy metrics (e.g., word error rate, latency, throughput).
-4. Use Pydantic models to ensure consistent input validation and structured output for both transcription and LLM interactions.
-5. Use LogFire for centralized, structured logging across all components, ensuring insights into both Whisper and LLM operations.
 
-Refer to Whisper documentation for model details, preprocessing guidelines, and advanced configurations. Refer to AI Pydantic documentation for structured LLM interactions and LogFire documentation for logging best practices.
 
