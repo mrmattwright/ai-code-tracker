@@ -1,0 +1,133 @@
+**Product Requirements Document (PRD)**
+
+**Project Name:** Chart Generation
+
+**Version:** 1.0
+
+**Date:** [Insert Date]
+
+**Author:** [Insert Author]
+
+---
+
+## **1. Overview**
+
+### **1.1 Purpose**
+
+The Chart Generation feature will visualize AI vs. human code contributions over time using various charts. The charts will be generated from structured commit data, allowing insights into AI-generated code percentage, lines of code added per day, and AI prompting distribution.
+
+### **1.2 Scope**
+
+This feature will process structured commit data and generate three key visualizations:
+
+1. **AI Code Percentage by Day** – Line chart showing the percentage of AI-written code per day.
+2. **New Lines of Code by Day** – Stacked bar chart displaying AI and human-added lines.
+3. **Time Prompting Breakdown** – Stacked bar chart showing the frequency of AI time-prompting categories (`S`, `M`, `L`, `XL`) per day.
+
+The output will be interactive charts generated using Plotly and will be saved to a specified output directory.
+
+### **1.3 Objectives**
+
+- Provide a clear visual representation of AI vs. human contributions.
+- Allow filtering and aggregation over different time periods.
+- Generate visualizations in an interactive format (HTML, PNG, or other exportable formats).
+- Enable specifying an output directory for saving charts.
+
+---
+
+## **2. Functional Requirements**
+
+### **2.1 Key Features**
+
+#### **2.1.1 Chart 1: AI Code Percentage by Day**
+
+- X-axis: Date (daily granularity)
+- Y-axis: Percentage of total changes made by AI
+- Data sourced from `percentage_total_changes_ai` field
+- Interactive line chart
+
+#### **2.1.2 Chart 2: New Lines of Code by Day**
+
+- X-axis: Date (daily granularity)
+- Y-axis: Number of lines added
+- Stacked bar chart with:
+  - AI lines added (`ai_lines_added`)
+  - Human lines added (`human_lines_added`)
+
+#### **2.1.3 Chart 3: AI Time Prompting Breakdown**
+
+- X-axis: Date (daily granularity)
+- Y-axis: Count of time-prompting events
+- Stacked bar chart with breakdown of:
+  - `time_prompting_S`
+  - `time_prompting_M`
+  - `time_prompting_L`
+  - `time_prompting_XL`
+
+### **2.2 User Interaction & Inputs**
+
+- Command-line interface (CLI) interaction.
+- Parameters extend from the existing command:
+  ```sh
+  uv run contribution_tracker.py --start-date 2025-01-01 --end-date 2025-03-01
+  ```
+- Additional parameters:
+  - `--output-dir` (mandatory): Path to directory where charts will be saved.
+  - `--generate-charts` (optional, flag): If included, triggers chart generation.
+  - `--format` (optional): Output format (`html`, `png`, `pdf`). Default: `html`.
+
+### **2.3 Output**
+
+- Charts will be saved in the specified output directory.
+- Interactive charts (Plotly) allowing zooming and filtering.
+- File naming convention: `{chart_name}.{format}` (e.g., `ai_code_percentage.html`).
+
+---
+
+## **3. Technical Requirements**
+
+### **3.1 Technology Stack**
+
+- **Programming Language:** Python 3
+- **Libraries:**
+  - `pandas` (data processing)
+  - `plotly` (chart generation)
+  - typer (extend existing use) 
+  - `os` and `pathlib` (file handling)
+
+### **3.2 Performance Considerations**
+
+- Efficient handling of large datasets with `pandas`.
+- Optimized rendering using Plotly’s interactive capabilities.
+- Support for various output formats without performance degradation.
+
+### **3.3 Error Handling & Logging**
+
+- Handles missing or malformed input data. Particulary this will mean where days are missing, cause there won't be a commit every day. 
+- Ensures valid output directory and permissions.
+- Logs errors and warnings for debugging.
+
+---
+
+## **4. Non-Functional Requirements**
+
+### **4.1 Security**
+
+- No external API calls required.
+- Read-only access to input data.
+
+### **4.2 Usability**
+
+- Simple CLI commands with clear documentation.
+- Ensure you integrate with the current CLI implementation. 
+- Output directory ensures organized file management.
+
+### **4.3 Maintainability**
+
+- Modular design for easy enhancements.
+- Configurable parameters for user flexibility.
+
+---
+
+**End of Document**
+

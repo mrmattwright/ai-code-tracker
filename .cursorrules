@@ -29,7 +29,6 @@ Error Handling and Validation
   - Use Pydantic models to validate and parse complex inputs, reducing manual validation code.
 
 Dependencies
-- OpenAI's Whisper library
 - Pydantic v2
 - Async libraries like asyncio for non-blocking operations
 - Libraries for audio processing, such as ffmpeg and librosa
