@@ -31,6 +31,31 @@ cd ai-code-tracker
 uv sync
 ```
 
+## Docker Usage
+
+You can either build the image locally or use the pre-built image from Docker Hub:
+
+```bash
+# Using pre-built image
+docker run -v $(pwd):/app mrmattwright/ai-code-tracker --start-date 2025-01-01
+
+# Or build locally
+docker build -t ai-code-tracker .
+
+# Run with basic options (using local build)
+docker run -v $(pwd):/app ai-code-tracker --start-date 2025-01-01
+
+# Run with all options
+docker run -v $(pwd):/app ai-code-tracker \
+  --start-date 2025-01-01 \
+  --end-date 2025-03-01 \
+  --group-by week \
+  --output-dir ./charts
+
+# Run tests in container
+docker run ai-code-tracker pytest
+```
+
 ## Git Configuration
 
 To track AI vs human contributions, you need to set up your Git configuration to use different author information when committing AI-generated code. The tool identifies AI contributions by matching the author email in `DEFAULT_AI_COMMITTER` (default: "llm <llm@opioinc.com>").
