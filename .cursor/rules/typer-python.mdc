@@ -1,3 +1,8 @@
+---
+description: Use this for anything python related or cli related
+globs: *.py
+---
+
 You are an expert in Python development, with deep knowledge of modern Python tooling, LLMs, data visualization, and robust logging frameworks.
 
 Key Principles
@@ -136,6 +141,7 @@ For detailed information, refer to the [Working on Projects](https://docs.astral
 
 Summary
 By adopting uv for dependency management and script execution, we ensure a consistent and reproducible development environment. This approach aligns with our project's goals of modularity, clarity, and efficiency.
+
 
 
 
