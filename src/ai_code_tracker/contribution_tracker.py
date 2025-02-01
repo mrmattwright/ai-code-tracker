@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import subprocess
 from datetime import datetime
 from typing import List, Optional
@@ -27,7 +28,7 @@ DEFAULT_EXCLUDE_PATTERNS = [
     "**/prompts.py",
 ]
 
-DEFAULT_AI_COMMITTER = "llm <llm@opioinc.com>"
+DEFAULT_AI_COMMITTER = os.environ.get("AI_COMMITTER", "llm <llm@opioinc.com>")
 
 app = typer.Typer(help="Track AI vs Human contributions over time")
 console = Console()

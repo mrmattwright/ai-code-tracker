@@ -95,13 +95,14 @@ Or set per-command author:
 git commit -m "AI generated change" --author="llm <llm@opioinc.com>"
 ```
 
-### Customizing AI Author
+## Configuring the AI Committer
 
-If you want to use a different AI author identifier, modify `DEFAULT_AI_COMMITTER` in `src/ai_code_tracker/contribution_tracker.py`:
+You can configure the AI committer via the `AI_COMMITTER` environment variable. By default, it is set to `"llm <llm@opioinc.com>"`, but you can override this without modifying For example, if you're using [direnv](https://direnv.net/), add the following line to your `.envrc`:
 
-```python
-DEFAULT_AI_COMMITTER = "your-ai-name <your-ai@email.com>"
+```bash
+export AI_COMMITTER="your_name <your_email@example.com>"
 ```
+
 
 ### Commit Message Format
 
