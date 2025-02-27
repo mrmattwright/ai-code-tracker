@@ -18,4 +18,4 @@ COPY . .
 RUN uv pip install --system .
 
 # Set default command
-ENTRYPOINT ["python", "-m", "ai_code_tracker.contribution_tracker"] 
+ENTRYPOINT ["ai-code-tracker"] 

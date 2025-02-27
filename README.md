@@ -23,12 +23,38 @@ Heavily inspired by [Aider's Release History](https://aider.chat/HISTORY.html)
 ## Installation
 
 ```bash
-# Clone the repository
+# Install from PyPI
+pip install ai-code-tracker
+
+# Or with uv
+uv add ai-code-tracker
+
+# Or clone the repository
 git clone https://github.com/mrmattwright/ai-code-tracker
 cd ai-code-tracker
-
-# Install dependencies
 uv sync
+```
+
+## Usage
+
+After installation, you can run the tool directly from the command line:
+
+```bash
+# Basic usage with date range
+ai-code-tracker --start-date 2024-01-01 --end-date 2024-03-01
+
+# Group by week instead of day
+ai-code-tracker --start-date 2024-01-01 --group-by week
+
+# Generate interactive charts
+ai-code-tracker --start-date 2024-01-01 --output-dir ./charts
+```
+
+If you've cloned the repository instead:
+
+```bash
+# Using uv
+uv run contribution_tracker.py --start-date 2024-01-01 --output-dir ./charts
 ```
 
 ## Docker Usage
@@ -103,7 +129,6 @@ You can configure the AI committer via the `AI_COMMITTER` environment variable. 
 export AI_COMMITTER="your_name <your_email@example.com>"
 ```
 
-
 ### Commit Message Format
 
 When committing AI-generated code, you need to include a time-prompting metric in your commit message:
@@ -145,22 +170,6 @@ exit 0
 Make it executable:
 ```bash
 chmod +x .git/hooks/commit-msg
-```
-
-## Usage
-
-```bash
-# Basic usage with date range
-uv run contribution_tracker.py --start-date 2025-01-01 --end-date 2025-03-01
-
-# Group by week instead of day
-uv run contribution_tracker.py --start-date 2025-01-01 --group-by week
-
-# Generate interactive charts
-uv run contribution_tracker.py --start-date 2025-01-01 --output-dir ./charts
-
-# Run tests
-uv run pytest
 ```
 
 ### Options
