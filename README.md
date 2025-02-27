@@ -57,6 +57,34 @@ If you've cloned the repository instead:
 uv run contribution_tracker.py --start-date 2024-01-01 --output-dir ./charts
 ```
 
+## Publishing to PyPI
+
+If you're contributing to this project and need to publish a new version to PyPI:
+
+1. Update the version number in `pyproject.toml`:
+   ```toml
+   [project]
+   name = "ai-code-tracker"
+   version = "0.1.1"  # Increment this version number
+   ```
+
+2. Build the distribution packages:
+   ```bash
+   uv run -m build
+   ```
+
+3. Upload to PyPI:
+   ```bash
+   uv run -m twine upload dist/*
+   ```
+
+   You'll need PyPI credentials or a token. For automated uploads, create a `.pypirc` file:
+   ```ini
+   [pypi]
+   username = __token__
+   password = your-token-here
+   ```
+
 ## Docker Usage
 
 You can either build the image locally or use the pre-built image from Docker Hub:

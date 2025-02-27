@@ -1,6 +1,6 @@
 [project]
 name = "ai-code-tracker"
-version = "0.1.0"
+version = "0.1.1"
 description = "Track and analyze the proportion of AI-assisted vs. human-written code in your Git repositories"
 readme = "README.md"
 authors = [{ name = "mrmattwright", email = "matt@sudden.co.nz" }]
